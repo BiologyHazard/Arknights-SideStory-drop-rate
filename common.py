@@ -1,61 +1,17 @@
+import json
 from pathlib import Path
 
 stats_folder = Path("企鹅物流数据")
 data_folder = Path("数据表")
 figure_folder = Path("图表")
 
-item_names_T3 = [
-    "固源岩组",
-    "糖组",
-    "聚酸酯组",
-    "异铁组",
-    "酮凝集组",
-    "全新装置",
-    "扭转醇",
-    "轻锰矿",
-    "研磨石",
-    "RMA70-12",
-    "凝胶",
-    "炽合金",
-    "晶体元件",
-    "半自然溶剂",
-    "化合切削液",
-    "转质盐组",
-    "褐素纤维",
-    "环烃聚质",
-]
-item_names_T2 = ["固源岩", "糖", "聚酸酯", "异铁", "酮凝集", "装置"]
-item_names_T1 = ["源岩", "代糖", "酯原料", "异铁碎片", "双酮", "破损装置"]
 
-sidestory_list = [
-    "骑兵与猎人",
-    "火蓝之心",
-    "喧闹法则",
-    "生于黑夜",
-    "沃伦姆德的薄暮",
-    "火蓝之心·复刻",
-    "密林悍将归来",
-    "骑兵与猎人·复刻",
-    "玛莉娅·临光",
-    "喧闹法则·复刻",
-    "孤岛风云",
-    "画中人",
-    "源石尘行动",
-    "生于黑夜·复刻",
-    "遗尘漫步",
-    "覆潮之下",
-    "沃伦姆德的薄暮·复刻",
-    "密林悍将归来·复刻",
-    "多索雷斯假日",
-    "玛莉娅·临光 复刻",
-    "长夜临光",
-    "孤岛风云·复刻",
-    "风雪过境",
-    "画中人·复刻",
-    "将进酒",
-    "",
-    "",
-    "",
-    "",
-    "",
-]
+def get_material_names(rarity: int) -> list[str]:
+    with open(stats_folder / "items.json", encoding="utf-8") as fp:
+        items: list[dict] = json.load(fp)
+    materials = [item for item in items if item["itemType"] == "MATERIAL"]
+    return [
+        item["name"]
+        for item in sorted(materials, key=lambda item: item["itemId"])
+        if item["rarity"] == rarity
+    ]
